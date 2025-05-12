@@ -119,6 +119,22 @@ mod tests {
         assert_eq!(c.into_inner(), 1);
     }
 
+
+    #[test]
+    #[should_panic]
+    fn test_refcell_panics() {
+        let c = std::cell::RefCell::new(0u32);
+        {
+            let mut a = c.borrow_mut();
+            {
+                let mut b = c.borrow_mut();
+                *b = 2;
+            }
+            *a = 1;
+        }
+        assert_eq!(c.into_inner(), 1);
+    }
+
     #[test]
     #[should_panic]
     fn test_stale() {
